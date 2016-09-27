@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+LIQUIBASE_HOME=/home/tsxadmin/liquibase-3.5.1-bin
+CLASSPATH=/home/tsxadmin/apache-tomcat-8.0.22/webapps/Services-6.13-Release.war
+CHANGE_LOG_FILE=changelog/master-changelog.xml
+DB_DRIVER=oracle.jdbc.OracleDriver
+DB_HOST=192.168.5.159
+DB_PORT=1521
+DB_SID=crdmtest
+DB_URL=jdbc:oracle:thin:@$DB_HOST:$DB_PORT:$DB_SID
+DB_USERNAME=crdm_xxx
+DB_PASSWORD=crdm_xxx
+
+"$LIQUIBASE_HOME/liquibase" --classpath=$CLASSPATH --changeLogFile=$CHANGE_LOG_FILE --driver=$DB_DRIVER --url=$DB_URL --username=$DB_USERNAME --password=$DB_PASSWORD update
+echo

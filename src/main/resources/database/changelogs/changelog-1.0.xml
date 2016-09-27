@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <property name="TABLE_CONSTRAINTS" value="USER_CONSTRAINTS" dbms="oracle" />
+    <property name="TABLE_CONSTRAINTS" value="INFORMATION_SCHEMA.TABLE_CONSTRAINTS" dbms="postgresql" />
+    <property name="TABLE_CONSTRAINTS" value="INFORMATION_SCHEMA.TABLE_CONSTRAINTS" dbms="hsqldb" />
+
+    <property name="TYPE_AS_ID" value="VARCHAR2(36 BYTE)" dbms="oracle" />
+    <property name="TYPE_AS_ID" value="VARCHAR(36)" dbms="postgresql" />
+    <property name="TYPE_AS_ID" value="VARCHAR(36)" dbms="hsqldb" />
+
+    <property name="TYPE_AS_NORMAL_TEXT" value="VARCHAR2(255 BYTE)" dbms="oracle" />
+    <property name="TYPE_AS_NORMAL_TEXT" value="TEXT" dbms="postgresql" />
+    <property name="TYPE_AS_NORMAL_TEXT" value="VARCHAR(255)" dbms="hsqldb" />
+
+    <changeSet author="ray.chen" id="1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TABLE_A" />
+            </not>
+        </preConditions>
+        <createTable tableName="TABLE_A">
+            <column name="COLUMN_1" type="${TYPE_AS_ID}">
+                <constraints nullable="false" />
+            </column>
+            <column name="COLUMN_2" type="${TYPE_AS_ID}" />
+            <column name="COLUMN_3" type="${TYPE_AS_ID}" />
+            <column name="COLUMN_4" type="${TYPE_AS_NORMAL_TEXT}" />
+            <column name="COLUMN_5" type="${TYPE_AS_NORMAL_TEXT}" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ray.chen" id="2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TABLE_B" />
+            </not>
+        </preConditions>
+        <createTable tableName="TABLE_B">
+            <column name="COLUMN_1" type="${TYPE_AS_ID}">
+                <constraints nullable="false" />
+            </column>
+            <column name="COLUMN_2" type="${TYPE_AS_NORMAL_TEXT}" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ray.chen" id="3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TABLE_C" />
+            </not>
+        </preConditions>
+        <createTable tableName="TABLE_C">
+            <column name="COLUMN_1" type="${TYPE_AS_ID}">
+                <constraints nullable="false" />
+            </column>
+            <column name="COLUMN_2" type="${TYPE_AS_NORMAL_TEXT}" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ray.chen" id="4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists tableName="TABLE_A" />
+            </not>
+        </preConditions>
+        <addPrimaryKey constraintName="TABLE_A_PK" tableName="TABLE_A" columnNames="COLUMN_1" />
+    </changeSet>
+
+    <changeSet author="ray.chen" id="5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists tableName="TABLE_B" />
+            </not>
+        </preConditions>
+        <addPrimaryKey constraintName="TABLE_B_PK" tableName="TABLE_B" columnNames="COLUMN_1" />
+    </changeSet>
+
+    <changeSet author="ray.chen" id="6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists tableName="TABLE_C" />
+            </not>
+        </preConditions>
+        <addPrimaryKey constraintName="TABLE_C_PK" tableName="TABLE_C" columnNames="COLUMN_1" />
+    </changeSet>
+
+    <!-- This change set is used to drop all foreign keys on the specified table. -->
+    <!-- It is better to execute this change set only once on databases which have never been upgraded using Liquibase, then remove this change set, -->
+    <!-- because foreign keys with unknown names are consequently gone from databases after executing this change set, -->
+    <!-- and the subsequent change sets to create foreign keys contains preconditions which check the existence of foreign keys using specified names. -->
+    <changeSet author="ray.chen" id="7">
+        <dropAllForeignKeyConstraints baseTableName="TABLE_A" />
+    </changeSet>
+
+    <changeSet author="ray.chen" id="8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="TABLE_A_1_FK" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="TABLE_A_1_FK" baseTableName="TABLE_A" baseColumnNames="COLUMN_2" referencedTableName="TABLE_B" referencedColumnNames="COLUMN_1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" />
+    </changeSet>
+
+    <changeSet author="ray.chen" id="9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="TABLE_A_2_FK" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="TABLE_A_2_FK" baseTableName="TABLE_A" baseColumnNames="COLUMN_3" referencedTableName="TABLE_C" referencedColumnNames="COLUMN_1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" />
+    </changeSet>
+
+    <changeSet author="ray.chen" id="10">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM ${TABLE_CONSTRAINTS} WHERE UPPER(TABLE_NAME) = 'TABLE_A' AND UPPER(CONSTRAINT_NAME) = 'TABLE_A_UK'</sqlCheck>
+        </preConditions>
+        <addUniqueConstraint constraintName="TABLE_A_UK" tableName="TABLE_A" columnNames="COLUMN_3, COLUMN_4" />
+    </changeSet>
+
+    <changeSet author="ray.chen" id="11">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM TABLE_B</sqlCheck>
+        </preConditions>
+        <insert tableName="TABLE_B">
+            <column name="COLUMN_1">1</column>
+            <column name="COLUMN_2">abc</column>
+        </insert>
+        <insert tableName="TABLE_B">
+            <column name="COLUMN_1">2</column>
+            <column name="COLUMN_2">def</column>
+        </insert>
+        <insert tableName="TABLE_B">
+            <column name="COLUMN_1">3</column>
+            <column name="COLUMN_2">ghi</column>
+        </insert>
+    </changeSet>
+
+    <changeSet author="ray.chen" id="12">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM TABLE_C</sqlCheck>
+        </preConditions>
+        <insert tableName="TABLE_C">
+            <column name="COLUMN_1">a</column>
+            <column name="COLUMN_2">123</column>
+        </insert>
+        <insert tableName="TABLE_C">
+            <column name="COLUMN_1">b</column>
+            <column name="COLUMN_2">456</column>
+        </insert>
+        <insert tableName="TABLE_C">
+            <column name="COLUMN_1">c</column>
+            <column name="COLUMN_2">789</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
