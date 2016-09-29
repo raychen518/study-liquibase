@@ -1,16 +1,17 @@
-@ECHO ON
+@ECHO OFF
 SETLOCAL
 SET LIQUIBASE_HOME=D:\liquibase-3.5.1-bin
-SET CHANGE_LOG_FILE=change_log_from_db_hsqldb.xml
-SET DB_DRIVER=org.hsqldb.jdbc.JDBCDriver
-SET DB_HOST=localhost
-SET DB_PORT=9001
-SET DB_SID=crdm
-SET DB_URL=jdbc:hsqldb:hsql://%DB_HOST%:%DB_PORT%/%DB_SID%
-SET DB_USERNAME=CRDM
-SET DB_PASSWORD=crdm
+SET CLASSPATH=%LIQUIBASE_HOME%\lib
+SET CHANGE_LOG_FILE=change_log_file_hsqldb.xml
+SET DATABASE_DRIVER=org.hsqldb.jdbc.JDBCDriver
+SET DATABASE_HOST=localhost
+SET DATABASE_PORT=9001
+SET DATABASE_SID=liquibase
+SET DATABASE_URL=jdbc:hsqldb:hsql://%DATABASE_HOST%:%DATABASE_PORT%/%DATABASE_SID%
+SET DATABASE_USERNAME=RAYCHEN
+SET DATABASE_PASSWORD=a1b2c3d4
 
-CALL "%LIQUIBASE_HOME%\liquibase.bat" --classpath=%LIQUIBASE_HOME%\lib --changeLogFile=%CHANGE_LOG_FILE% --driver=%DB_DRIVER% --url=%DB_URL% --username=%DB_USERNAME% --password=%DB_PASSWORD% generateChangeLog
+CALL "%LIQUIBASE_HOME%\liquibase.bat" --classpath=%CLASSPATH% --changeLogFile=%CHANGE_LOG_FILE% --driver=%DATABASE_DRIVER% --url=%DATABASE_URL% --username=%DATABASE_USERNAME% --password=%DATABASE_PASSWORD% --logLevel=info generateChangeLog
 ECHO.
 
 PAUSE
