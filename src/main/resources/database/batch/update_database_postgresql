@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+LIQUIBASE_HOME=/home/raychen/liquibase-3.5.1-bin
+CLASSPATH=$LIQUIBASE_HOME\lib
+CHANGE_LOG_FILE=../changelogs/changelog-master.xml
+DATABASE_DRIVER=org.postgresql.Driver
+DATABASE_HOST=192.168.105.108
+DATABASE_PORT=5432
+DATABASE_SID=liquibase
+DATABASE_URL=jdbc:postgresql://$DATABASE_HOST:$DATABASE_PORT/$DATABASE_SID
+DATABASE_USERNAME=raychen
+DATABASE_PASSWORD=a1b2c3d4
+
+"$LIQUIBASE_HOME\liquibase" --classpath=$CLASSPATH --changeLogFile=$CHANGE_LOG_FILE --driver=$DATABASE_DRIVER --url=$DATABASE_URL --username=$DATABASE_USERNAME --password=$DATABASE_PASSWORD --logLevel=info update
+echo
