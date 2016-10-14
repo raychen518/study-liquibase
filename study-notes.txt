@@ -4,6 +4,7 @@ Contents
 Overview
 Features
 Concepts
+Quick Start Steps
 References
 
 ========================================
@@ -74,6 +75,89 @@ Change
     The following 2 types of changes are supported.
     - Descriptive changes (these changes generate SQL statements accordingly for different types of databases)
     - SQL statements
+
+========================================
+Quick Start Steps
+========================================
+Here are the steps to create a simple table in a Oracle database using Liquibase, for a quick start.
+
+1. Download and Install Liquibase
+   Liquibase can be downloaded from its official website.
+   To install Liquibase, unzip the downloaded Liquibase ZIP file to a local directory (e.g. D:\liquibase-3.5.1-bin).
+
+2. Create a Liquibase Changelog File
+   Here is an example.
+   D:\liquibase\changelogs\changelog-for-quick-start.xml
+   ---------------------------------------------------------------------------------------------------------------------
+   <?xml version="1.0" encoding="UTF-8"?>
+   <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+       <!-- Create the Table A -->
+       <changeSet author="ray.chen" id="1">
+           <preConditions onFail="MARK_RAN">
+               <not>
+                   <tableExists tableName="TABLE_A" />
+               </not>
+           </preConditions>
+           <createTable tableName="TABLE_A">
+               <column name="COLUMN_1" type="CHAR(5)">
+                   <constraints nullable="false" />
+               </column>
+               <column name="COLUMN_2" type="VARCHAR2(255)" />
+               <column name="COLUMN_3" type="NUMBER(3)" />
+           </createTable>
+       </changeSet>
+
+       <!-- Add the Primary Key for the Table A -->
+       <changeSet author="ray.chen" id="2">
+           <preConditions onFail="MARK_RAN">
+               <not>
+                   <primaryKeyExists tableName="TABLE_A" />
+               </not>
+           </preConditions>
+           <addPrimaryKey constraintName="TABLE_A_PK" tableName="TABLE_A" columnNames="COLUMN_1" />
+       </changeSet>
+
+       <!-- Insert Some Rows into the Table A -->
+       <changeSet author="ray.chen" id="3">
+           <preConditions onFail="MARK_RAN">
+               <sqlCheck expectedResult="0">SELECT COUNT(1) FROM TABLE_A</sqlCheck>
+           </preConditions>
+           <insert tableName="TABLE_A">
+               <column name="COLUMN_1">00001</column>
+               <column name="COLUMN_2">abc</column>
+               <column name="COLUMN_3">123</column>
+           </insert>
+           <insert tableName="TABLE_A">
+               <column name="COLUMN_1">00002</column>
+               <column name="COLUMN_2">def</column>
+               <column name="COLUMN_3">456</column>
+           </insert>
+           <insert tableName="TABLE_A">
+               <column name="COLUMN_1">00003</column>
+               <column name="COLUMN_2">ghi</column>
+               <column name="COLUMN_3">789</column>
+           </insert>
+       </changeSet>
+   </databaseChangeLog>
+   ---------------------------------------------------------------------------------------------------------------------
+
+3. Run the Liquibase Update Command
+   Here is an example.
+   ---------------------------------------------------------------------------------------------------------------------
+   D:\liquibase-3.5.1-bin\liquibase.bat
+       --classpath=D:\liquibase-3.5.1-bin\lib
+       --changeLogFile=D:\liquibase\changelogs\changelog-for-quick-start.xml
+       --driver=oracle.jdbc.OracleDriver
+       --url=jdbc:oracle:thin:@localhost:1521:liquibase
+       --username=RAYCHEN
+       --password=a1b2c3d4
+       --logLevel=info
+       update
+   ---------------------------------------------------------------------------------------------------------------------
+   D:\liquibase-3.5.1-bin\liquibase.bat --classpath=D:\liquibase-3.5.1-bin\lib --changeLogFile=D:\liquibase\changelogs\changelog-for-quick-start.xml --driver=oracle.jdbc.OracleDriver --url=jdbc:oracle:thin:@localhost:1521:liquibase --username=RAYCHEN --password=a1b2c3d4 --logLevel=info update
+   ---------------------------------------------------------------------------------------------------------------------
+
+4. Check the Database Updated by Liquibase
 
 ========================================
 References
