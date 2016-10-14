@@ -48,13 +48,15 @@ Concepts
 Changelog File
 Change Set
 Change
+Precondition
+Context
 
 Changelog File
     A changelog file is a text file containing database changes.
 
     Changelog files can be arbitrarily nested for better management.
 
-    The corresponding tag of changelog files is: databaseChangeLog.
+    The corresponding setting target of changelog files is the <databaseChangeLog> tag.
 
 Change Set
     A change set is the unit to be tracked for the execution.
@@ -66,15 +68,31 @@ Change Set
 
     When Liquibase runs, it queries the DATABASECHANGELOG table for the change sets that are marked as executed and then executes all change sets in the changelog files that have not been marked as executed.
 
-    The corresponding tag of change sets is: changeSet.
+    The corresponding setting target of change sets is the <changeSet> tag.
 
 Change
-    A change is the change/refactoring to apply to the database.
+    A change is some change/refactoring to apply to the database.
     Generally, one change set should contain only one change, to avoid failed auto-commit statements that can leave the database in an unexpected state.
 
-    The following 2 types of changes are supported.
+    There are 2 types of changes, as follows.
     - Descriptive changes (these changes generate SQL statements accordingly for different types of databases)
     - SQL statements
+
+    There are many corresponding setting targets of changes, such as the <createTable>, <addPrimaryKey>, <insert>, <modifyDataType> and <dropView> tags.
+
+Precondition
+    A precondition is a condition which will be tested before an execution and its failure stops that execution.
+
+    Preconditions can be applied to either changelogs or change sets.
+
+    The corresponding setting target of preconditions is the <preConditions> tag.
+
+Context
+    A context is a mark on change sets which indicates the environments allowing the change sets to run in.
+
+    If no context is specified, the change set will run in all environments.
+
+    The corresponding setting target of contexts is the "context" attribute.
 
 ========================================
 Quick Start Steps
