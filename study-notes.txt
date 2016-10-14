@@ -1,0 +1,85 @@
+++++++++++
+Contents
+++++++++++
+Overview
+Features
+Concepts
+References
+
+========================================
+Xxxxx Xxxxx Xxxxx
+========================================
+++++++++++
+Contents
+++++++++++
+============================================================
+Xxxxx Xxxxx Xxxxx
+============================================================
+--------------------------------------------------------------------------------
+
+========================================
+Overview
+========================================
+Liquibase is an open-source database-independent library for tracking, managing and applying database schema changes.
+
+========================================
+Features
+========================================
+- Can create/upgrade databases (per specified changelog files).
+- Can generate changelog files (per specified databases).
+- Can generate database change documentation.
+- Can generate database diffs.
+- Can generate SQL scripts.
+- Can run through the build, in the application process or on demand.
+- Support multiple database types.
+- Support multiple developers.
+- Support multiple code formats (XML, JSON, SQL and YAML).
+- Support contexts.
+- Support code branching and merging.
+- Support cluster-safe database upgrades.
+- Support use without live database connections.
+- Support rollbacks of database changes.
+- Support custom processes (extensions and plugins).
+
+========================================
+Concepts
+========================================
+Changelog File
+Change Set
+Change
+
+Changelog File
+    A changelog file is a text file containing database changes.
+
+    Changelog files can be arbitrarily nested for better management.
+
+    The corresponding tag of changelog files is: databaseChangeLog.
+
+Change Set
+    A change set is the unit to be tracked for the execution.
+
+    Change sets are uniquely identified by the following values.
+    - Location of the hosting changelog file (the path of the hosting changelog file).
+    - Author of current change set (the value of the "author" attribute of current change set).
+    - ID of current change set (the value of the "id" attribute of current change set).
+
+    When Liquibase runs, it queries the DATABASECHANGELOG table for the change sets that are marked as executed and then executes all change sets in the changelog files that have not been marked as executed.
+
+    The corresponding tag of change sets is: changeSet.
+
+Change
+    A change is the change/refactoring to apply to the database.
+    Generally, one change set should contain only one change, to avoid failed auto-commit statements that can leave the database in an unexpected state.
+
+    The following 2 types of changes are supported.
+    - Descriptive changes (these changes generate SQL statements accordingly for different types of databases)
+    - SQL statements
+
+========================================
+References
+========================================
+Liquibase
+http://www.liquibase.org/
+
+Liquibase - Wikipedia
+https://en.wikipedia.org/wiki/Liquibase
