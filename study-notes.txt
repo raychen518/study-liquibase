@@ -5,6 +5,7 @@ Overview
 Features
 Concepts
 Quick Start Steps
+Building Changelogs
 References
 
 ========================================
@@ -56,7 +57,7 @@ Changelog File
 
     Changelog files can be arbitrarily nested for better management.
 
-    The corresponding setting target of changelog files is the <databaseChangeLog> tag.
+    The corresponding configuration setting of changelog files is the <databaseChangeLog> tag.
 
 Change Set
     A change set is the unit to be tracked for the execution.
@@ -68,7 +69,7 @@ Change Set
 
     When Liquibase runs, it queries the DATABASECHANGELOG table for the change sets that are marked as executed and then executes all change sets in the changelog files that have not been marked as executed.
 
-    The corresponding setting target of change sets is the <changeSet> tag.
+    The corresponding configuration setting of change sets is the <changeSet> tag.
 
 Change
     A change is some change/refactoring to apply to the database.
@@ -85,14 +86,14 @@ Precondition
 
     Preconditions can be applied to either changelogs or change sets.
 
-    The corresponding setting target of preconditions is the <preConditions> tag.
+    The corresponding configuration setting of preconditions is the <preConditions> tag.
 
 Context
     A context is a mark on change sets which indicates the environments allowing the change sets to run in.
 
     If no context is specified, the change set will run in all environments.
 
-    The corresponding setting target of contexts is the "context" attribute.
+    The corresponding configuration setting of contexts is the "context" attribute.
 
 ========================================
 Quick Start Steps
@@ -176,6 +177,105 @@ Here are the steps to create a simple table in a Oracle database using Liquibase
    ---------------------------------------------------------------------------------------------------------------------
 
 4. Check the Database Updated by Liquibase
+
+========================================
+Building Changelogs
+========================================
+Changelog File
+    A changelog file is a text file containing database changes, it is the root of all changes.
+
+    The corresponding configuration setting of changelog files is the <databaseChangeLog> tag.
+
+    The <databaseChangeLog> Tag
+        Attributes
+            Name                    Description
+            ----------------------------------------------------------------------------------------
+            logicalFilePath         This attribute is used to override the actual file path when creating the unique identifiers of change sets.
+                                    It is required when moving or renaming changelogs.
+
+                                    Example:
+                                        <databaseChangeLog ... logicalFilePath="changelog-main.xml">
+                                            ...
+                                        </databaseChangeLog>
+
+        Sub-tags
+            Name                    Description
+            ----------------------------------------------------------------------------------------
+            changeSet               This tag is used to define a change set.
+
+                                    Example:
+                                        <databaseChangeLog ...>
+                                            <changeSet author="ray.chen" id="1">
+                                                <createTable tableName="TABLE_A">
+                                                    <column name="COLUMN_1" type="CHAR(5)">
+                                                        <constraints nullable="false" />
+                                                    </column>
+                                                    <column name="COLUMN_2" type="VARCHAR2(255)" />
+                                                    <column name="COLUMN_3" type="NUMBER(3)" />
+                                                </createTable>
+                                            </changeSet>
+                                            ...
+                                        </databaseChangeLog>
+
+            include                 This tag is used to include a changelog file.
+
+                                    Example:
+                                        <databaseChangeLog ...>
+                                            <include file="changelog-1.0.xml" relativeToChangelogFile="true" />
+                                            ...
+                                        </databaseChangeLog>
+
+            preConditions           This tag is used to define some preonditions.
+
+                                    Example:
+                                        <databaseChangeLog ...>
+                                            <preConditions>
+                                                <dbms type="oracle" />
+                                                <runningAs username="SYSTEM" />
+                                            </preConditions>
+                                            ...
+                                        </databaseChangeLog>
+
+            property                This tag is used to define a property.
+
+                                    Example:
+                                        <databaseChangeLog ...>
+                                            <property name="TYPE_AS_NORMAL_TEXT" value="VARCHAR2(255)" dbms="oracle" />
+                                            <property name="TYPE_AS_NORMAL_TEXT" value="VARCHAR(255)" dbms="postgresql" />
+                                            <property name="TYPE_AS_NORMAL_TEXT" value="VARCHAR(255)" dbms="hsqldb" />
+                                            ...
+                                        </databaseChangeLog>
+
+    Process
+        When Liquibase runs, it parses the <databaseChangeLog> tag.
+        It first checks the defined preconditions.
+        If any of the preconditions fails, Liquibase exits with an error message;
+        otherwise, Liquibase starts to run the <include> and <changeSet> tags in the order they appear.
+
+    XML Schema
+        The XML schema for the <databaseChangeLog> tag is available at http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd (if the version is 3.1).
+
+    Unique Identifier of the Change Set
+        ID of the Change Set +
+        Author of the Change Set +
+        Path of the Changelog File = Unique Identifier of the Change Set
+
+    Sample Empty ChangeLog
+        Note: Assuming the version is 3.1.
+
+        XML
+            --------------------------------------------------------------------------------------------------------------------------------
+            <databaseChangeLog
+                xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+                                    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+            </databaseChangeLog>
+            --------------------------------------------------------------------------------------------------------------------------------
+            <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+            </databaseChangeLog>
+            --------------------------------------------------------------------------------------------------------------------------------
 
 ========================================
 References
