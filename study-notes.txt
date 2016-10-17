@@ -4,8 +4,14 @@ Contents
 Overview
 Features
 Concepts
+    Changelog File
+    Change Set
+    Change
+    Precondition
+    Context
 Quick Start Steps
 Building Changelogs
+    Changelog File
 References
 
 ========================================
@@ -109,7 +115,7 @@ Here are the steps to create a simple table in a Oracle database using Liquibase
    D:\liquibase\changelogs\changelog-for-quick-start.xml
    ---------------------------------------------------------------------------------------------------------------------
    <?xml version="1.0" encoding="UTF-8"?>
-   <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+   <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
        <!-- Create the Table A -->
        <changeSet author="ray.chen" id="1">
            <preConditions onFail="MARK_RAN">
@@ -181,6 +187,8 @@ Here are the steps to create a simple table in a Oracle database using Liquibase
 ========================================
 Building Changelogs
 ========================================
+Changelog File
+
 Changelog File
     A changelog file is a text file containing database changes, it is the root of all changes.
 
@@ -260,7 +268,10 @@ Changelog File
         Author of the Change Set +
         Path of the Changelog File = Unique Identifier of the Change Set
 
-    Sample Empty ChangeLog
+    Formats
+        A changelog file can be in multiple formats like XML, JSON, SQL, YAML, etc.
+
+    Sample Empty Changelog
         Note: Assuming the version is 3.1.
 
         XML
@@ -276,6 +287,25 @@ Changelog File
             <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
             </databaseChangeLog>
             --------------------------------------------------------------------------------------------------------------------------------
+
+        JSON
+            --------------------------------------------------------------------------------------------------------------------------------
+            {
+                "databaseChangeLog": [
+                ]
+            }
+            --------------------------------------------------------------------------------------------------------------------------------
+
+        SQL
+            --------------------------------------------------------------------------------------------------------------------------------
+            --liquibase formatted sql
+            --------------------------------------------------------------------------------------------------------------------------------
+
+        JSON
+            --------------------------------------------------------------------------------------------------------------------------------
+            databaseChangeLog:
+            --------------------------------------------------------------------------------------------------------------------------------
+
 
 ========================================
 References
